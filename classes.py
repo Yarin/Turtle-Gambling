@@ -5,6 +5,8 @@ class turtle():
     def __init__(self, x, y, image):
         self.x = x
         self.y = y
+        self.firstX = x
+        self.firstY= y
         self.image = pygame.image.load(image)
         self.vel_list = [1,1,10,1,1,1,0.5,0.5,0.5,0.5,20]
         self.vel = choice(self.vel_list)
@@ -16,7 +18,10 @@ class turtle():
     def moveturtle(self):
         self.vel = choice(self.vel_list)
         self.x -= self.vel
-        
+    
+    def reset(self):
+        self.x = self.firstX
+        self.y = self.firstY
 
 class line():
     def __init__(self, x, y, image):

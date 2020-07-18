@@ -1,5 +1,6 @@
 import pygame
 from classes import turtle, line, textOnScreen
+import files as f
 
 pygame.init()
 
@@ -7,6 +8,7 @@ main_race_run = True
 main_race_win = pygame.display.set_mode((1400,650))
 main_race_win_Width = 1400
 main_race_win_Height = 650
+CLOCK = pygame.time.Clock()
 
 turtle1 = turtle(1200,0,"turtle1.png")
 turtle2 = turtle(1200, 400, "turtle1.png")
@@ -26,38 +28,59 @@ who_won = textOnScreen("Player 1 is the winner!",'Arial', main_race_win_Width/2 
 winner = None
 
 is_moving = True
-
+activate_winner_func = True
 while main_race_run:
-    
+    CLOCK.tick(120)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             main_race_run = False
-
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                f.reset_winners('winners.txt')
+                f.reset_winners('total.txt')
+                print("Deleted Logs")
+        
+    # keys = pygame.key.get_pressed()
+    # if keys[pygame.K_SPACE]:
+    #     f.reset_winners('winners.txt')
+    #     f.reset_winners('total.txt')
+    #     print("Deleted Logs")
     
     if turtle1.x <= 150:
-        winner = 'player1'
+        winner = 'Player One'
     elif turtle2.x <= 150:
-        winner = 'player2'
+        winner = 'Player Two'
     """elif turtle1.x <= 150 and turtle2.x <= 150:
         who_won.showText(main_race_win)"""
 
     
-       
     
-    main_race_win.fill((255,255,255))   
+    main_race_win.fill((255, 255, 255))
     finish_line.drawline(main_race_win) 
     start_line.drawline(main_race_win)
     drawturtlesss()
     if is_moving:
         moveturtlesss()  
 
-    if winner == 'player1':
-        who_won.showText(main_race_win)
-        is_moving = False
-    elif winner == 'player2':
-        who_won.text = 'player 2 is the winner!'
-        who_won.showText(main_race_win)
-        is_moving = False
+    if winner == 'Player One':
+        #who_won.showText(main_race_win)
+        #is_moving = False
+        f.write_winner("winners.txt", winner)
+        f.write_counter("total.txt", winner)
+        turtle1.reset()
+        turtle2.reset()
+        print("Player 1 won")
+        winner = None
+    elif winner == 'Player Two':
+        who_won.text = 'Player 2 is the winner!'
+        #who_won.showText(main_race_win)
+        #is_moving = False
+        f.write_winner("winners.txt", winner)
+        f.write_counter("total.txt", winner)
+        turtle1.reset()
+        turtle2.reset()
+        print("Player 2 won")
+        winner = None
     elif winner == 'draw':
         who_won.text = 'its a draw'
         who_won.showText(main_race_win)
